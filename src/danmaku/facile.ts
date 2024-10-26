@@ -82,7 +82,7 @@ export class FacileDanmaku<T> {
   protected _delInTrack() {
     this._options.delInTrack(this);
     if (this.track) {
-      remove(this.track.list, this);
+      this.track._remove(this);
     }
   }
 
@@ -222,9 +222,11 @@ export class FacileDanmaku<T> {
   /**
    * @internal
    */
-  public _updateTrack(data: Track<T> | null) {
-    if (data) data.list.push(this);
-    this.track = data;
+  public _updateTrack(track: Track<T> | null) {
+    this.track = track;
+    if (track) {
+      track._add(this);
+    }
   }
 
   /**

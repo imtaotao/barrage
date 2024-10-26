@@ -1,4 +1,4 @@
-import { map } from 'aidly';
+import { map, assert } from 'aidly';
 import { ids, toNumber } from './utils';
 import type { StyleKey, SizeArea, AreaOptions } from './types';
 
@@ -78,6 +78,16 @@ export class Container {
       if (isLegal(y.end)) this._size.y.end = y.end;
       if (isLegal(y.start)) this._size.y.start = y.start;
     }
+  }
+
+  /**
+   * @internal
+   */
+  public _toNumber(p: 'height' | 'width', val: number | string) {
+    let n = typeof val === 'number' ? val : toNumber(val, this[p]);
+    if (n > this[p]) n = this[p];
+    assert(!Number.isNaN(n), `Invalid "${val}", result is NaN`);
+    return n;
   }
 
   /**

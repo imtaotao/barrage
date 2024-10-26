@@ -39,6 +39,7 @@ export function create<
   return manager;
 }
 
+export type { Track } from './track';
 export type { Manager } from './manager';
 export type { HookOn, HooksOn, Plugin, HookType } from 'hooks-plugin';
 export type {

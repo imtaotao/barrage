@@ -11,7 +11,7 @@ import { Track } from './track';
 import { Container } from './container';
 import { FacileDanmaku } from './danmaku/facile';
 import { FlexibleDanmaku } from './danmaku/flexible';
-import { toNumber, randomIdx, nextFrame, INTERNAL_FLAG } from './utils';
+import { randomIdx, nextFrame, INTERNAL_FLAG } from './utils';
 import type {
   StashData,
   EachCallback,
@@ -66,7 +66,7 @@ export class Engine<T> {
   public updateOptions(newOptions: Partial<EngineOptions>) {
     this._options = Object.assign(this._options, newOptions);
     if (hasOwn(newOptions, 'gap')) {
-      this._options.gap = this._toNumber('width', this._options.gap);
+      this._options.gap = this.container._toNumber('width', this._options.gap);
     }
     if (hasOwn(newOptions, 'trackHeight')) {
       this.format();
@@ -132,8 +132,8 @@ export class Engine<T> {
     const { width, height } = this.container;
     this.container._format();
     const { gap, trackHeight } = this._options;
-    this._options.gap = this._toNumber('width', gap);
-    const h = this._toNumber('height', trackHeight);
+    this._options.gap = this.container._toNumber('width', gap);
+    const h = this.container._toNumber('height', trackHeight);
 
     if (h <= 0) {
       for (let i = 0; i < this.tracks.length; i++) {
@@ -162,16 +162,17 @@ export class Engine<T> {
         if (track.location.midile > this.container.height) {
           this.tracks[i].clear();
         } else {
-          Array.from(track.list).forEach((dm) =>
-            dm._format(width, height, track),
-          );
+          track.each((dm) => {
+            dm._format(width, height, track);
+          });
         }
         track._updateLocation(location);
       } else {
         const track = new Track<T>({
           index: i,
-          location,
           list: [],
+          location,
+          container: this.container,
         });
         this.tracks.push(track);
       }
@@ -368,7 +369,7 @@ export class Engine<T> {
         const { mode, durationRange } = this._options;
         if (mode !== 'none' && cur.type === 'facile') {
           assert(cur.track, 'Danmaku missing "track"');
-          const prev = this._last(cur.track.list, 1);
+          const prev = cur.track._last(1);
           if (prev && cur.loops === 0) {
             const fixTime = this._collisionPrediction(
               prev,
@@ -433,28 +434,18 @@ export class Engine<T> {
         appendNode: () => {
           const { x, y } = position(dm, this.container);
           dm._updatePosition({
-            x: this._toNumber('width', x),
-            y: this._toNumber('height', y),
+            x: this.container._toNumber('width', x),
+            y: this.container._toNumber('height', y),
           });
         },
       });
     } else {
       dm._updatePosition({
-        x: this._toNumber('width', position.x),
-        y: this._toNumber('height', position.y),
+        x: this.container._toNumber('width', position.x),
+        y: this.container._toNumber('height', position.y),
       });
     }
     return dm;
-  }
-
-  private _last(ls: Array<FacileDanmaku<T>>, li: number) {
-    for (let i = ls.length - 1; i >= 0; i--) {
-      const dm = ls[i - li];
-      if (dm && !dm.paused && dm.loops === 0 && dm.type === 'facile') {
-        return dm;
-      }
-    }
-    return null;
   }
 
   private _getTrack(
@@ -464,23 +455,26 @@ export class Engine<T> {
     if (this.rows === 0) return null;
     const { gap, mode } = this._options;
     if (founds.size === this.tracks.length) {
-      return mode === 'adaptive' ? prev! : null;
+      return mode === 'adaptive' ? prev || null : null;
     }
     const i = randomIdx(founds, this.rows);
     const track = this.tracks[i];
-    if (mode === 'none') {
-      return track;
-    }
-    const last = this._last(track.list, 0);
-    if (!last) {
-      return track;
-    }
-    const lastWidth = last.getWidth();
-    if (
-      lastWidth > 0 &&
-      last._getMoveDistance() >= (gap as number) + lastWidth
-    ) {
-      return track;
+
+    if (!track.isLock) {
+      if (mode === 'none') {
+        return track;
+      }
+      const last = track._last(0);
+      if (!last) {
+        return track;
+      }
+      const lastWidth = last.getWidth();
+      if (
+        lastWidth > 0 &&
+        last._getMoveDistance() >= (gap as number) + lastWidth
+      ) {
+        return track;
+      }
     }
     founds.add(i);
     return this._getTrack(founds, track);
@@ -504,14 +498,5 @@ export class Engine<T> {
     const currentFixTime =
       ((cw + (gap as number)) * remainingTime) / this.container.width;
     return remainingTime + currentFixTime;
-  }
-
-  private _toNumber(p: 'height' | 'width', val: number | string) {
-    let n = typeof val === 'number' ? val : toNumber(val, this.container[p]);
-    if (n > this.container[p]) {
-      n = this.container[p];
-    }
-    assert(!Number.isNaN(n), `Invalid "${val}", result is NaN`);
-    return n;
   }
 }

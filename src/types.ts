@@ -100,12 +100,6 @@ export interface FreezeOptions {
   preventEvents?: Array<'pause' | 'stop' | 'resume' | 'start' | (string & {})>;
 }
 
-export interface TrackData<T> {
-  i: number;
-  list: Array<FacileDanmaku<T>>;
-  location: [number, number, number];
-}
-
 export interface StashData<T> {
   data: T;
   options: Required<PushOptions<T>>;
