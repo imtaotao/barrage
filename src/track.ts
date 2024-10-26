@@ -1,4 +1,5 @@
 import { remove } from 'aidly';
+import type { Location } from './types';
 import type { Container } from './container';
 import type { FacileDanmaku } from './danmaku/facile';
 
@@ -9,18 +10,12 @@ export interface TrackOptions<T> {
   list: Array<FacileDanmaku<T>>;
 }
 
-export interface Location {
-  top: number;
-  midile: number;
-  bottom: number;
-}
-
 export class Track<T> {
   private _container: Container;
-  private list: Array<FacileDanmaku<T>>;
   public isLock = false;
   public index: number;
   public location: Location;
+  public list: Array<FacileDanmaku<T>>;
 
   public constructor({ index, list, location, container }: TrackOptions<T>) {
     this.list = list;

@@ -48,6 +48,7 @@ export type {
   Position,
   PushOptions,
   PushFlexOptions,
+  Location,
   ValueType,
   Direction,
   Danmaku,

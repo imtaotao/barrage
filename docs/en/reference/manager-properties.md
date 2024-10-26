@@ -54,58 +54,8 @@ The plugin system instance of `manager`, its API can be found in the **hooks-plu
 
 https://github.com/imtaotao/hooks-plugin?tab=readme-ov-file#apis
 
-<h2></h2>
+## `manager.container`
 
-**The danmaku container instance has the following properties and methods. When you obtain the container instance in some hooks, you can refer to the knowledge in this section.**
+**类型：`Container`**
 
-> [!NOTE] Note
-> If you need to change the width and height of the container, it is recommended to use the `manager.setArea()` method instead of changing it through `manager.container.setStyle()`. Otherwise, you will need to manually call `manager.format()`.
-
-```ts
-declare class Container {
-  width: number;
-  height: number;
-  node: HTMLDivElement;
-  parentNode: HTMLElement | null;
-  setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void;
-}
-```
-
-## manager.container.width
-
-**Type: `number`**<br/>
-**Default: `0`**
-
-The `width` of the container, this value may change after you call `manager.format()`.
-
-## manager.container.height
-
-**Type: `number`**<br/>
-**Default: `0`**
-
-The `height` of the container, this value may change after you call `manager.format()`.
-
-## manager.container.node
-
-**Type: `HTMLDivElement`**<br/>
-**Default: `div`**
-
-The `DOM` node of the container.
-
-## manager.container.parentNode
-
-**Type: `HTMLElement | null`**<br/>
-**Default: `null`**
-
-The parent node of the container, which can be accessed through this property after being set by `manager.mount()`.
-
-## manager.container.setStyle()
-
-**Type: `setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void`**
-
-This method can set the style of the container node.
-
-```ts
-// So you can set some styles for the container in the following way
-manager.container.setStyle('background', 'red');
-```
+See [**`Container API`**](./container-api) chapter。

@@ -54,58 +54,8 @@ manager.statuses; // 类型为 { background: string }
 
 https://github.com/imtaotao/hooks-plugin?tab=readme-ov-file#apis
 
-<h2></h2>
+## `manager.container`
 
-**弹幕容器实例上面有以下一些属性和方法，当你在一些钩子里面获取到 container 实例时，可以参考本小节的知识。**
+**类型：`Container`**
 
-> [!NOTE] 注意事项
-> 如果你需要对容器的宽高做更改，建议使用 `manager.setArea()` 方法，而不要通过 `manager.container.setStyle()` 来更改，否则你需要手动调用 `manager.format()`。
-
-```ts
-declare class Container {
-  width: number;
-  height: number;
-  node: HTMLDivElement;
-  parentNode: HTMLElement | null;
-  setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void;
-}
-```
-
-## manager.container.width
-
-**类型：`number`**<br/>
-**默认值：`0`**
-
-容器的宽度，当你调用 `manager.format()` 后，这个值可能会有变化。
-
-## manager.container.height
-
-**类型：`number`**<br/>
-**默认值：`0`**
-
-容器的宽度，当你调用 `manager.format()` 后，这个值可能会有变化。
-
-## manager.container.node
-
-**类型：`HTMLDivElement`**<br/>
-**默认值：`div`**
-
-容器的 DOM 节点。
-
-## manager.container.parentNode
-
-**类型：`HTMLElement | null`**<br/>
-**默认值：`null`**
-
-容器的父节点，通过 `manager.mount()` 设置后，可以通过此属性拿到。
-
-## manager.container.setStyle()
-
-**类型：`setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void`**
-
-这个方法可以设置容器节点的样式。
-
-```ts
-// 所以你可以以下方式来给容器设置一些样式
-manager.container.setStyle('background', 'red');
-```
+见 [**`容器 API`**](./container-api) 小节。

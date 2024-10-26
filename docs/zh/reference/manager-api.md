@@ -98,7 +98,7 @@ manager.push(
 > [!NOTE] 高级弹幕说明
 >
 > 1. 高级弹幕的 `options` 和普通弹幕的 `options` 行为一样，如果不传会默认从 `manager.options` 里面取默认值。
-> 2. 高级弹幕**必须传递 `position` 来指定位置**，如果需要指定在某个轨道渲染，可以借助 [**`getTrackLocation()`**](#manager-gettracklocation) 来做到。
+> 2. 高级弹幕**必须传递 `position` 来指定位置**，如果需要指定在某个轨道渲染，可以借助 [**`getTrack().location`**](#manager-gettrack) 来做到。
 
 ```ts
 import { create } from 'danmu';
@@ -135,66 +135,11 @@ manager.pushFlexibleDanmaku('弹幕内容', {
 });
 ```
 
-## `manager.getTrackLocation()`
+## `manager.getTrack()`
 
-**类型：`(i: number) => { start: number, middle: number, end: number }`**
+**类型：`(i: number) => Track<T>`**
 
-用来获取某条轨道的位置信息，**单位为 `px`，为 Y 轴的数据**。**`i` 如果为正整数，则是取的是 `track[i]` 的位置信息，如果为负正整数则从后往前取。**
-
-> [!NOTE] 提示
-> 下标默认从 **`0`** 开始，也就是你传递为 0 时，取的是第一条轨道的数据。
-
-**示例：**
-
-```ts
-// 取第一条轨道的位置信息
-const { start, middle, end } = manager.getTrackLocation(0);
-
-// 取最后一条轨道的位置信息
-const { start, middle, end } = manager.getTrackLocation(-1);
-```
-
-> [!NOTE] 提示
-> 当你发送高级弹幕的时候如果需要将其发送到某条轨道上，此方法可能会很有用。普通弹幕的位置信息计算方式如下，会在轨道的居中的位置渲染，如果要保持和普通弹幕一样，或许也是一样的算法。
->
-> > 1. 对于弹幕的高度，如果你不需要通过计算就可以得到，则不需要通过 `getHeight()` 方法。
-> > 2. 你确保获取的轨道存在，否则会报错，可以通过 `manager.trackCount` 来判断。
-> > 3. 你可以在我们的在线 [**demo**](https://imtaotao.github.io/danmu/) 打开浏览器控制台输入这段代码查看效果，
-
-```ts {9,12}
-// 发送一个高级弹幕
-manager.pushFlexibleDanmaku(
-  { content: '弹幕内容' },
-  {
-    duration: 5000,
-    direction: 'none',
-    position(danmaku, container) {
-      // 渲染在第 4 条轨道中
-      const { middle } = manager.getTrackLocation(3);
-      return {
-        x: (container.width - danmaku.getWidth()) * 0.5,
-        y: middle - danmaku.getHeight() / 2,
-      };
-    },
-  },
-);
-```
-
-## `manager.clearTrack()`
-
-**类型：`(i: number) => void`**
-
-用来清除某条轨道上渲染的弹幕。**`i` 如果为正整数，则是清除 `track[i]` 上的弹幕，如果为负正整数则从后往前取。**
-
-**示例：**
-
-```ts
-// 清除第一条轨道上的弹幕
-manager.clearTrack(0);
-
-// 清除最后一条轨道上的弹幕
-manager.clearTrack(-1);
-```
+获取某个具体的轨道，轨道的 API 见 [**`轨道 API`**](./track-api)。
 
 ## `manager.len()`
 

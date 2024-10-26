@@ -44,12 +44,14 @@ import type {
   Position,
   PushOptions,
   PushFlexOptions,
+  Location,
   ValueType,
   Direction,
-  CreateOption,
   Danmaku,
   DanmakuType,
   DanmakuPlugin,
   ManagerPlugin,
+  ManagerOptions,
+  CreateOption,
 } from 'danmu';
 ```

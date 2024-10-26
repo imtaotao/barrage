@@ -60,6 +60,20 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
+        text: 'basic',
+        collapsed: false,
+        items: [
+          {
+            text: 'Container API',
+            link: '/en/reference/container-api',
+          },
+          {
+            text: 'Track API',
+            link: '/en/reference/track-api',
+          },
+        ],
+      },
+      {
         text: 'Common Use Cases',
         collapsed: false,
         items: [

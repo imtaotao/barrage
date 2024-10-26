@@ -34,7 +34,7 @@ manager.pushFlexibleDanmaku('弹幕内容', {
   direction: 'none',
   position(danmaku, container) {
     // 渲染在第 3 条轨道中
-    const { middle } = manager.getTrackLocation(2);
+    const { middle } = manager.getTrack(2).location;
     return {
       x: `50% - ${danmaku.getWidth() / 2}`,
       y: middle - danmaku.getHeight() / 2,
@@ -52,7 +52,7 @@ manager.pushFlexibleDanmaku('弹幕内容', {
   direction: 'none',
   position(danmaku, container) {
     // 渲染在第 3 条轨道中
-    const { middle } = manager.getTrackLocation(2);
+    const { middle } = manager.getTrack(2).location;
     return {
       x: 10,
       y: `50% - ${danmaku.getHeight() / 2}`,

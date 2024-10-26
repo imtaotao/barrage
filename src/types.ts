@@ -76,6 +76,12 @@ export interface ManagerOptions extends EngineOptions {
   interval: number;
 }
 
+export interface Location {
+  top: number;
+  midile: number;
+  bottom: number;
+}
+
 export interface Position<T = number> {
   x: T;
   y: T;

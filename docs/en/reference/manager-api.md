@@ -98,7 +98,7 @@ Send a flexible danmaku. **Flexible danmaku will render on the next polling** an
 > [!NOTE] Flexible Danmaku Explanation
 >
 > 1. The `options` for flexible danmaku behave the same as the `options` for facile danmaku. If not provided, default values will be taken from `manager.options`.
-> 2. Flexible danmaku **must pass `position` to specify the location**. If you need to specify rendering on a particular track, you can use [**`getTrackLocation()`**](#manager-gettracklocation) to achieve this.
+> 2. Flexible danmaku **must pass `position` to specify the location**. If you need to specify rendering on a particular track, you can use [**`getTrack().location`**](#manager-gettrack) to achieve this.
 
 ```ts
 import { create } from 'danmu';
@@ -135,66 +135,11 @@ manager.pushFlexibleDanmaku('content', {
 });
 ```
 
-## `manager.getTrackLocation()`
+## `manager.getTrack()`
 
-**Type: `(i: number) => { start: number, middle: number, end: number }`**
+**Type: `(i: number) => Track<T>`**
 
-Used to get the position information of a specific track, **the unit is `px`, and it is the data for the Y-axis**. **If `i` is a positive integer, it retrieves the position information of `track[i]`. If it is a negative integer, it retrieves from the end.**
-
-> [!NOTE] Hint
-> The index starts from **`0`** by default, meaning if you pass `0`, it retrieves the data for the first track.
-
-**Example:**
-
-```ts
-// Get the position information of the first track
-const { start, middle, end } = manager.getTrackLocation(0);
-
-// Get the position information of the last track
-const { start, middle, end } = manager.getTrackLocation(-1);
-```
-
-> [!NOTE] Hint
-> When sending flexible danmaku, if you need to send it to a specific track, this method can be very useful. The position information for facile danmaku is calculated as follows and will render in the center of the track. If you want to keep it the same as facile danmaku, perhaps the same algorithm is used.
->
-> > 1. For the height of the danmaku, if you can obtain it without calculation, you do not need to use the `getHeight()` method.
-> > 2. Ensure that the track you are accessing exists; otherwise, an error will occur. You can check this using `manager.trackCount`.
-> > 3. You can open the browser console in our online [**demo**](https://imtaotao.github.io/danmu/) and enter this code to see the effect.
-
-```ts {9,12}
-// Send a flexible danmaku
-manager.pushFlexibleDanmaku(
-  { content: 'content' },
-  {
-    duration: 5000,
-    direction: 'none',
-    position(danmaku, container) {
-      // Render in the 4th track
-      const { middle } = manager.getTrackLocation(3);
-      return {
-        x: (container.width - danmaku.getWidth()) * 0.5,
-        y: middle - danmaku.getHeight() / 2,
-      };
-    },
-  },
-);
-```
-
-## `manager.clearTrack()`
-
-**Type: `(i: number) => void`**
-
-Used to clear the danmaku rendered on a specific track. **If `i` is a positive integer, it clears the danmaku on `track[i]`. If it is a negative integer, it clears from the end.**
-
-**Example:**
-
-```ts
-// Clear the danmaku on the first track
-manager.clearTrack(0);
-
-// Clear the danmaku on the last track
-manager.clearTrack(-1);
-```
+获取某个具体的轨道，轨道的 API 见 [**`Track API`**](./track-api)。
 
 ## `manager.len()`
 
