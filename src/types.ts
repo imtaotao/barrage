@@ -78,7 +78,7 @@ export interface ManagerOptions extends EngineOptions {
 
 export interface Location {
   top: number;
-  midile: number;
+  middle: number;
   bottom: number;
 }
 

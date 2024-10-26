@@ -137,9 +137,17 @@ manager.pushFlexibleDanmaku('content', {
 
 ## `manager.getTrack()`
 
-**Type: `(i: number) => Track<T>`**
+**类型：`(i: number) => Track<T>`**
 
-获取某个具体的轨道，轨道的 API 见 [**`Track API`**](./track-api)。
+获取某个具体的轨道，下标默认从 0 开始，如果下标为负数，则从后往前取，轨道的 API 见 [**`轨道 API`**](./track-api)。
+
+```ts
+// 获取第一条轨道
+const track = manager.getTrack(0);
+
+// 获取最后一条轨道
+const track = manager.getTrack(-1);
+```
 
 ## `manager.len()`
 

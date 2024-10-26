@@ -147,8 +147,8 @@ export class Engine<T> {
       const track = this.tracks[i];
       const top = h * i;
       const bottom = h * (i + 1) - 1;
-      const midile = (bottom - top) / 2 + top;
-      const location = { top, midile, bottom };
+      const middle = (bottom - top) / 2 + top;
+      const location = { top, middle, bottom };
 
       if (bottom > this.container.height) {
         this.rows--;
@@ -159,7 +159,7 @@ export class Engine<T> {
       } else if (track) {
         // If the reused track is larger than the container height,
         // the overflow needs to be deleted.
-        if (track.location.midile > this.container.height) {
+        if (track.location.middle > this.container.height) {
           this.tracks[i].clear();
         } else {
           track.each((dm) => {
@@ -348,7 +348,7 @@ export class Engine<T> {
           if (height === 0 && ++i < 20) {
             triggerSetup();
           } else {
-            const y = track.location.midile - height / 2;
+            const y = track.location.middle - height / 2;
             if (y + height > this.container.height) return;
             dm._updatePosition({ y });
             setup();
