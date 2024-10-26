@@ -1,4 +1,5 @@
 import { now, remove } from 'aidly';
+import type { Track } from '../track';
 import type { Container } from '../container';
 import { createDanmakuLifeCycle } from '../lifeCycle';
 import { ids, nextFrame, INTERNAL_FLAG, whenTransitionEnds } from '../utils';
@@ -6,7 +7,6 @@ import type {
   StyleKey,
   Position,
   MoveTimer,
-  TrackData,
   Direction,
   InfoRecord,
   Danmaku,
@@ -44,10 +44,10 @@ export class FacileDanmaku<T> {
   public recorder: InfoRecord;
   public nextFrame = nextFrame;
   public type: DanmakuType = 'facile';
+  public track: Track<T> | null = null;
   public node: HTMLElement | null = null;
   public moveTimer: MoveTimer | null = null;
   public position: Position = { x: 0, y: 0 };
-  public trackData: TrackData<T> | null = null;
   public pluginSystem: PluginSystem<Danmaku<T>> =
     createDanmakuLifeCycle<Danmaku<T>>();
   protected _internalStatuses: InternalStatuses;
@@ -81,8 +81,8 @@ export class FacileDanmaku<T> {
    */
   protected _delInTrack() {
     this._options.delInTrack(this);
-    if (this.trackData) {
-      remove(this.trackData.list, this);
+    if (this.track) {
+      remove(this.track.list, this);
     }
   }
 
@@ -222,15 +222,15 @@ export class FacileDanmaku<T> {
   /**
    * @internal
    */
-  public _updateTrackData(data: TrackData<T> | null) {
+  public _updateTrack(data: Track<T> | null) {
     if (data) data.list.push(this);
-    this.trackData = data;
+    this.track = data;
   }
 
   /**
    * @internal
    */
-  public _format(oldWidth: number, oldHeight: number, newTrack: TrackData<T>) {
+  public _format(oldWidth: number, oldHeight: number, newTrack: Track<T>) {
     if (this.isEnded) {
       this.destroy();
       return;
@@ -238,7 +238,8 @@ export class FacileDanmaku<T> {
     // Don't let the rendering of danmaku exceed the container
     if (
       this._options.container.height !== oldHeight &&
-      this.getHeight() + newTrack.location[2] > this._options.container.height
+      this.getHeight() + newTrack.location.bottom >
+        this._options.container.height
     ) {
       this.destroy();
       return;
@@ -266,8 +267,8 @@ export class FacileDanmaku<T> {
     this._removeNode();
     this._delInTrack();
     this._setStartStatus();
+    this._updateTrack(null);
     this.setStyle('top', '');
-    this._updateTrackData(null);
     if (this.moveTimer) {
       this.moveTimer.clear();
       this.moveTimer = null;

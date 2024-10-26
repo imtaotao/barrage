@@ -125,15 +125,9 @@ export class Manager<
     return this._engine.asyncEach(fn);
   }
 
-  public clearTrack(i: number) {
+  public getTrack(i: number) {
     i = i >= 0 ? i : this.trackCount + i;
-    this._engine.clearTrack(i);
-  }
-
-  public getTrackLocation(i: number) {
-    i = i >= 0 ? i : this.trackCount + i;
-    const [start, middle, end] = this._engine.tracks[i].location;
-    return { start, middle, end };
+    return this._engine.tracks[i];
   }
 
   public freeze({ preventEvents = [] }: FreezeOptions = {}) {

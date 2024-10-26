@@ -27,13 +27,13 @@ jobs:
         run: pnpm install
 
       - name: Build src
-        run: pnpm run core:build
+        run: pnpm run build:core
 
       - name: Build demo
-        run: pnpm run demo:build
+        run: pnpm run build:demo
 
       - name: Build docs
-        run: pnpm run docs:build
+        run: pnpm run build:docs
 
       - name: Deploy demo to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

@@ -7,12 +7,12 @@ import {
   isInBounds,
   batchProcess,
 } from 'aidly';
+import { Track } from './track';
 import { Container } from './container';
 import { FacileDanmaku } from './danmaku/facile';
 import { FlexibleDanmaku } from './danmaku/flexible';
 import { toNumber, randomIdx, nextFrame, INTERNAL_FLAG } from './utils';
 import type {
-  TrackData,
   StashData,
   EachCallback,
   Danmaku,
@@ -28,7 +28,7 @@ import type {
 export class Engine<T> {
   public rows = 0;
   public container = new Container();
-  public tracks = [] as Array<TrackData<T>>;
+  public tracks = [] as Array<Track<T>>;
   private _fx = new Queue();
   private _sets = {
     view: new Set<FacileDanmaku<T>>(),
@@ -43,15 +43,6 @@ export class Engine<T> {
   });
 
   public constructor(private _options: EngineOptions) {}
-
-  // We have to make a copy.
-  // During the loop, there are too many factors that change danmaku,
-  // which makes it impossible to guarantee the stability of the list.
-  public clearTrack(i: number) {
-    for (const dm of Array.from(this.tracks[i].list)) {
-      dm.destroy();
-    }
-  }
 
   public len() {
     const { stash, view, flexible } = this._sets;
@@ -87,7 +78,7 @@ export class Engine<T> {
     this._sets.flexible.clear();
     this._sets.stash.length = 0;
     for (let i = 0; i < this.tracks.length; i++) {
-      this.clearTrack(i);
+      this.tracks[i].clear();
     }
   }
 
@@ -146,7 +137,7 @@ export class Engine<T> {
 
     if (h <= 0) {
       for (let i = 0; i < this.tracks.length; i++) {
-        this.clearTrack(i);
+        this.tracks[i].clear();
       }
       return;
     }
@@ -154,40 +145,41 @@ export class Engine<T> {
 
     for (let i = 0; i < rows; i++) {
       const track = this.tracks[i];
-      const start = h * i;
-      const end = h * (i + 1) - 1;
-      const mid = (end - start) / 2 + start;
-      const location = [start, mid, end] as [number, number, number];
+      const top = h * i;
+      const bottom = h * (i + 1) - 1;
+      const midile = (bottom - top) / 2 + top;
+      const location = { top, midile, bottom };
 
-      if (end > this.container.height) {
+      if (bottom > this.container.height) {
         this.rows--;
         if (track) {
-          this.clearTrack(i);
+          this.tracks[i].clear();
           this.tracks.splice(i, 1);
         }
       } else if (track) {
         // If the reused track is larger than the container height,
         // the overflow needs to be deleted.
-        if (track.location[2] > this.container.height) {
-          this.clearTrack(i);
+        if (track.location.midile > this.container.height) {
+          this.tracks[i].clear();
         } else {
           Array.from(track.list).forEach((dm) =>
             dm._format(width, height, track),
           );
         }
-        track.location = location;
+        track._updateLocation(location);
       } else {
-        this.tracks.push({
-          i,
+        const track = new Track<T>({
+          index: i,
           location,
           list: [],
         });
+        this.tracks.push(track);
       }
     }
     // Delete the extra tracks and the danmaku inside
     if (this.tracks.length > this.rows) {
       for (let i = this.rows; i < this.tracks.length; i++) {
-        this.clearTrack(i);
+        this.tracks[i].clear();
       }
       this.tracks.splice(this.rows, this.tracks.length - this.rows);
     }
@@ -293,8 +285,8 @@ export class Engine<T> {
     let dm: FacileDanmaku<T>;
     const layer = this._sets.stash.shift();
     if (!layer) return;
-    const trackData = this._getTrackData();
-    if (!trackData) {
+    const track = this._getTrack();
+    if (!track) {
       this._sets.stash.unshift(layer);
       // If there is nothing to render, return `false` to stop the loop.
       return false;
@@ -314,7 +306,7 @@ export class Engine<T> {
       type: 'facile',
       danmaku: dm,
       prevent: false,
-      trackIndex: trackData.i,
+      trackIndex: track.index,
     });
 
     // When the rate is less than or equal to 0,
@@ -324,7 +316,7 @@ export class Engine<T> {
       // First createNode, users may add styles
       dm._createNode();
       dm._appendNode(this.container.node);
-      dm._updateTrackData(trackData);
+      dm._updateTrack(track);
 
       const setup = () => {
         this._sets.view.add(dm);
@@ -355,7 +347,7 @@ export class Engine<T> {
           if (height === 0 && ++i < 20) {
             triggerSetup();
           } else {
-            const y = trackData.location[1] - height / 2;
+            const y = track.location.midile - height / 2;
             if (y + height > this.container.height) return;
             dm._updatePosition({ y });
             setup();
@@ -375,8 +367,8 @@ export class Engine<T> {
         }
         const { mode, durationRange } = this._options;
         if (mode !== 'none' && cur.type === 'facile') {
-          assert(cur.trackData, 'Danmaku missing "trackData"');
-          const prev = this._last(cur.trackData.list, 1);
+          assert(cur.track, 'Danmaku missing "track"');
+          const prev = this._last(cur.track.list, 1);
           if (prev && cur.loops === 0) {
             const fixTime = this._collisionPrediction(
               prev,
@@ -465,33 +457,33 @@ export class Engine<T> {
     return null;
   }
 
-  private _getTrackData(
+  private _getTrack(
     founds = new Set<number>(),
-    prev?: TrackData<T>,
-  ): TrackData<T> | null {
+    prev?: Track<T>,
+  ): Track<T> | null {
     if (this.rows === 0) return null;
     const { gap, mode } = this._options;
     if (founds.size === this.tracks.length) {
       return mode === 'adaptive' ? prev! : null;
     }
     const i = randomIdx(founds, this.rows);
-    const trackData = this.tracks[i];
+    const track = this.tracks[i];
     if (mode === 'none') {
-      return trackData;
+      return track;
     }
-    const last = this._last(trackData.list, 0);
+    const last = this._last(track.list, 0);
     if (!last) {
-      return trackData;
+      return track;
     }
     const lastWidth = last.getWidth();
     if (
       lastWidth > 0 &&
       last._getMoveDistance() >= (gap as number) + lastWidth
     ) {
-      return trackData;
+      return track;
     }
     founds.add(i);
-    return this._getTrackData(founds, trackData);
+    return this._getTrack(founds, track);
   }
 
   private _collisionPrediction(prv: FacileDanmaku<T>, cur: FacileDanmaku<T>) {
