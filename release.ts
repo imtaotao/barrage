@@ -57,7 +57,7 @@ async function release(releaseType: ReleaseType) {
 }
 
 function build() {
-  return run('pnpm', ['run', 'core:build']);
+  return run('pnpm', ['run', 'build:core']);
 }
 
 async function publish(version: string) {
