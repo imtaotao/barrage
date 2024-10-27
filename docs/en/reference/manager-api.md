@@ -137,15 +137,15 @@ manager.pushFlexibleDanmaku('content', {
 
 ## `manager.getTrack()`
 
-**类型：`(i: number) => Track<T>`**
+**Type: `(i: number) => Track<T>`**
 
-获取某个具体的轨道，下标默认从 0 开始，如果下标为负数，则从后往前取，轨道的 API 见 [**`轨道 API`**](./track-api)。
+Retrieve a specific track, where indices start from **`0`** by default. If the index is negative, it counts backwards from the last track. For track API details, see [**`Track API`**](./track-api).
 
 ```ts
-// 获取第一条轨道
+// Retrieve the first track
 const track = manager.getTrack(0);
 
-// 获取最后一条轨道
+// Retrieve the last track
 const track = manager.getTrack(-1);
 ```
 

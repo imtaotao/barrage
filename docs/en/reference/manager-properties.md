@@ -46,6 +46,12 @@ manager.statuses; // Type is `{ background: string }`
 
 The current number of tracks inside the container. When the container size changes and after `format` (either by manually calling the `format()` method or by calling the `setArea()` method), the `trackCount` will also change accordingly.
 
+## `manager.container`
+
+**类型：`Container`**
+
+See the [**`Container API`**](./container-api) section.
+
 ## `manager.pluginSystem`
 
 **Type: `PluginSystem`**
@@ -53,9 +59,3 @@ The current number of tracks inside the container. When the container size chang
 The plugin system instance of `manager`, its API can be found in the **hooks-plugin** documentation.
 
 https://github.com/imtaotao/hooks-plugin?tab=readme-ov-file#apis
-
-## `manager.container`
-
-**类型：`Container`**
-
-See [**`Container API`**](./container-api) chapter。

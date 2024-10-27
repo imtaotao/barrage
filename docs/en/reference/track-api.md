@@ -1,11 +1,11 @@
-# 轨道 API
+# Track API
 
-Track 类是轨道相关的 api，你可以通过 `manager.getTrack(i)` 来获取某一条轨道实例。
+The Track class represents the API related to tracks. You can obtain an instance of a track by using [**`manager.getTrack(i)`**](./manager-api#manager-gettrack).
 
 ```ts
 interface Location {
   top: number;
-  midile: number;
+  middle: number;
   bottom: number;
 }
 
@@ -25,58 +25,57 @@ declare class Track {
 
 ## track.width
 
-**类型：`number`**<br/>
+**Type: `number`**<br/>
 
-轨道的宽度，当你调用 `manager.format()` 后，这个值可能会有变化。
+The width of the track, which may change after you call `manager.format()`.
 
 ## track.height
 
-**类型：`number`**<br/>
+**Type: `number`**<br/>
 
-轨道的高度，当你调用 `manager.format()` 后，这个值可能会有变化。
+The height of the track, which may change after you call `manager.format()`.
 
 ## track.index
 
-**类型：`number`**<br/>
+**Type: `number`**<br/>
 
-再当前容器的轨道列表中，当前这条轨道所在的坐标，例如 index 为 1，则代表是当前容器轨道列表中的第 2 条轨道。
+The position of this track in the track list of the current container. For example, if index is 1, it represents the second track in the list.
 
 ## track.isLock
 
-**类型：`boolean`**<br/>
-**默认值：`false`**
+**Type: `boolean`**<br/>
+**Default Value: `false`**
 
-用来判断当前这条轨道是否被锁定。
+Used to determine if the current track is locked.
 
 ## track.list
 
-**类型：`Array<FacileDanmaku<T>`**
+**Type: `Array<FacileDanmaku<T>`**
 
-当前这条轨道内部的弹幕列表，如果你要对列表进行循环，建议使用 track.each() 方法。
+The list of facile danmaku within this track. If you need to iterate over the list, it is recommended to use the `track.each()` method.
 
 ## track.location
 
-**类型：`Location`**
+**Type: `Location`**
 
-当前这条轨道高度相关位置信息，**单位为 `px`**, 他是基于容器来计算的，当容器 format 之后，此熟悉也会跟着变化。
+This attribute represents the height-related position information of the track, measured in `px`. It is calculated based on the container, and changes when the container is formatted. This property can be especially useful when you need to send a flexible danmaku to a specific track.
 
-> [!NOTE] 提示
-> 当你发送高级弹幕的时候如果需要将其发送到某条轨道上，此属性可能会很有用。
+> [!NOTE] Tips
 >
-> > 1. 对于弹幕的高度，如果你不需要通过计算就可以得到，则不需要通过 `getHeight()` 方法。
-> > 2. 你要确保获取的轨道存在，否则会报错，可以通过 `manager.trackCount` 来判断当前总共有多少条轨道。
-> > 3. 你可以在我们的在线 [**demo**](https://imtaotao.github.io/danmu/) 打开浏览器控制台输入这段代码查看效果。
-> > 4. 通过以下示例的方式渲染高级弹幕，实际上弹幕不会受到轨道的约束，只是渲染的位置在某条轨道上，所以当你对某条轨道调用了 `track.lock()`，并不会影响高级弹幕。
+> 1. If you can determine the height of the danmaku without needing to calculate it, you don’t need to use the `getHeight()` method.
+> 2. Ensure that the track you are accessing exists, otherwise it will throw an error. You can check how many tracks are available using `manager.trackCount`.
+> 3. When rendering flexible danmaku as shown in the following example, the danmaku itself is not constrained by the track; it is merely rendered at a track's location. Therefore, calling `track.lock()` on a track will not affect the flexible danmaku.
+> 4. You can try this code in our online [**demo**](https://imtaotao.github.io/danmu/) by opening your browser's console and entering the code to see the effects.
 
 ```ts {9,12}
-// 发送一个高级弹幕
+// Send a flexible danmaku
 manager.pushFlexibleDanmaku(
-  { content: '弹幕内容' },
+  { content: 'content' },
   {
     duration: 5000,
     direction: 'none',
     position(danmaku, container) {
-      // 渲染在第 4 条轨道中
+      // Render in the fourth track
       const { middle } = manager.getTrack(3).location;
       return {
         x: (container.width - danmaku.getWidth()) * 0.5,
@@ -89,24 +88,24 @@ manager.pushFlexibleDanmaku(
 
 ## track.lock()
 
-**类型：`() => void`**
+**Type: `() => void`**
 
-用于锁定当前轨道，当轨道被锁定之后，当前这条轨道将不会发送新的弹幕。
+Used to lock the current track. Once the track is locked, no new danmaku will be sent on this track.
 
 ## track.unlock()
 
-**类型：`() => void`**
+**Type: `() => void`**
 
-解锁当前这条轨道
+Unlocks the current track.
 
 ## track.clear()
 
-**类型：`() => void`**
+**Type: `() => void`**
 
-清空当前这条轨道内部所有的弹幕，但是不会阻止后续的弹幕发送。
+Clears all danmaku within the current track, but does not prevent subsequent danmaku from being sent.
 
 ```ts
-// 如果你需要清空并阻止后续的弹幕发送
+// If you need to clear the track and prevent further danmaku
 const track = manager.getTrack(0);
 
 track.clear();
@@ -115,6 +114,6 @@ track.lock();
 
 ## track.each()
 
-**类型：`(fn: (danmaku: FacileDanmaku<T>) => unknown | boolean) => void`**
+**Type: `(fn: (danmaku: FacileDanmaku<T>) => unknown | boolean) => void`**
 
-对 `track.list` 进行遍历，当你有对弹幕进行销毁的行为时，最好是使用此方法，回调函数返回 `false` 会阻止后续的遍历。
+Iterates over `track.list`. It is advised to use this method when you need to destroy individual danmaku. Returning `false` from the callback function will prevent further iterations.

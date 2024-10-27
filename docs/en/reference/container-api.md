@@ -1,9 +1,9 @@
-# 容器 API
+# Container API
 
-弹幕容器实例上面有以下一些属性和方法，当你在一些钩子里面获取到 container 实例时，可以参考本小节的知识。你可以通过 `manager.container` 获取实例。
+The danmaku container instance has the following properties and methods. You can refer to this section when you get a container instance in certain hooks. You can retrieve the instance via [**`manager.container`**](./manager-properties.md#manager-container).
 
-> [!NOTE] 注意事项
-> 如果你需要对容器的宽高做更改，建议使用 `manager.setArea()` 方法，而不要通过 `manager.container.setStyle()` 来更改，否则你需要手动调用 `manager.format()`。
+> [!NOTE] Notes
+> If you need to change the dimensions of the container, it's recommended to use the `manager.setArea()` method instead of changing it through `manager.container.setStyle()`. Otherwise, you will need to manually call `manager.format()`.
 
 ```ts
 declare class Container {
@@ -17,39 +17,39 @@ declare class Container {
 
 ## container.width
 
-**类型：`number`**<br/>
-**默认值：`0`**
+**Type: `number`**<br/>
+**Default Value: `0`**
 
-容器的宽度，当你调用 `manager.format()` 后，这个值可能会有变化。
+The width of the container, this value may change after calling `manager.format()`.
 
 ## container.height
 
-**类型：`number`**<br/>
-**默认值：`0`**
+**Type: `number`**<br/>
+**Default Value: `0`**
 
-容器的高度，当你调用 `manager.format()` 后，这个值可能会有变化。
+The height of the container, this value may change after calling `manager.format()`.
 
 ## container.node
 
-**类型：`HTMLDivElement`**<br/>
-**默认值：`div`**
+**Type: `HTMLDivElement`**<br/>
+**Default Value: `div`**
 
-容器的 DOM 节点。
+The DOM node of the container.
 
 ## container.parentNode
 
-**类型：`HTMLElement | null`**<br/>
-**默认值：`null`**
+**Type: `HTMLElement | null`**<br/>
+**Default Value: `null`**
 
-容器的父节点，通过 `manager.mount()` 设置后，可以通过此属性拿到。
+The parent node of the container, which can be accessed through this property after setting with `manager.mount()`.
 
 ## container.setStyle()
 
-**类型：`setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void`**
+**Type: `setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]): void`**
 
-这个方法可以设置容器节点的样式。
+This method allows you to set the style of the container node.
 
 ```ts
-// 所以你可以以下方式来给容器设置一些样式
+// So you can set some styles on the container like this
 manager.container.setStyle('background', 'red');
 ```

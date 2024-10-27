@@ -44,7 +44,13 @@ manager.statuses; // 类型为 { background: string }
 
 **类型：`number`**
 
-当前容器内部轨道的数量。当容器的大小改变后，并且 `format` 之后（你手动调用 `format()` 方法或者调用 `setArea()` 方法），`trackCount` 也会随之改变。
+当前容器内部轨道的数量。当容器的大小改变后，并且 `format` 之后（手动调用 `format()` 方法或者调用 `setArea()` 方法也会 `format`），`trackCount` 也会随之改变。
+
+## `manager.container`
+
+**类型：`Container`**
+
+见 [**`容器 API`**](./container-api) 小节。
 
 ## `manager.pluginSystem`
 
@@ -53,9 +59,3 @@ manager.statuses; // 类型为 { background: string }
 `manager` 的插件系统实例，其 api 可以见 **hooks-plugin**的文档。
 
 https://github.com/imtaotao/hooks-plugin?tab=readme-ov-file#apis
-
-## `manager.container`
-
-**类型：`Container`**
-
-见 [**`容器 API`**](./container-api) 小节。

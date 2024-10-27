@@ -1,6 +1,6 @@
 # 容器 API
 
-弹幕容器实例上面有以下一些属性和方法，当你在一些钩子里面获取到 container 实例时，可以参考本小节的知识。你可以通过 `manager.container` 获取实例。
+弹幕容器实例上面有以下一些属性和方法，当你在一些钩子里面获取到 container 实例时，可以参考本小节的知识。你可以通过 [**`manager.container`**](./manager-properties.md#manager-container) 获取实例。
 
 > [!NOTE] 注意事项
 > 如果你需要对容器的宽高做更改，建议使用 `manager.setArea()` 方法，而不要通过 `manager.container.setStyle()` 来更改，否则你需要手动调用 `manager.format()`。

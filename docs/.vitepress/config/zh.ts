@@ -61,12 +61,12 @@ export const zh: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: '容器 API',
-            link: '/zh/reference/container-api',
-          },
-          {
             text: '轨道 API',
             link: '/zh/reference/track-api',
+          },
+          {
+            text: '容器 API',
+            link: '/zh/reference/container-api',
           },
         ],
       },
