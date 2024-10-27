@@ -349,34 +349,17 @@ export class Manager<
     });
   }
 
-  public setDirection(direction: Exclude<Direction, 'none'>) {
-    this.updateOptions({ direction });
+  public remove(pluginName: string) {
+    this.pluginSystem.remove(pluginName);
   }
 
-  public setMode(mode: Mode) {
-    this.updateOptions({ mode });
-  }
-
-  public setGap(gap: number | string) {
-    this.updateOptions({ gap });
-  }
-
-  public setTrackHeight(trackHeight: number | string) {
-    this.updateOptions({ trackHeight });
-  }
-
-  public setInterval(interval: number) {
-    this.updateOptions({ interval });
-  }
-
-  public setDurationRange(durationRange: [number, number]) {
-    this.updateOptions({ durationRange });
-  }
-
-  public setRate(rate: number) {
-    if (rate !== this.options.rate) {
-      this.updateOptions({ rate });
+  public use(plugin: ManagerPlugin<T> | ((m: this) => ManagerPlugin<T>)) {
+    if (typeof plugin === 'function') plugin = plugin(this);
+    if (!plugin.name) {
+      plugin.name = `__runtime_plugin_${ids.runtime++}__`;
     }
+    this.pluginSystem.useRefine(plugin);
+    return plugin as ManagerPlugin<T> & { name: string };
   }
 
   public setStyle<T extends StyleKey>(key: T, val: CSSStyleDeclaration[T]) {
@@ -426,16 +409,33 @@ export class Manager<
     }
   }
 
-  public remove(pluginName: string) {
-    this.pluginSystem.remove(pluginName);
+  public setDirection(direction: Exclude<Direction, 'none'>) {
+    this.updateOptions({ direction });
   }
 
-  public use(plugin: ManagerPlugin<T> | ((m: this) => ManagerPlugin<T>)) {
-    if (typeof plugin === 'function') plugin = plugin(this);
-    if (!plugin.name) {
-      plugin.name = `__runtime_plugin_${ids.runtime++}__`;
+  public setMode(mode: Mode) {
+    this.updateOptions({ mode });
+  }
+
+  public setGap(gap: number | string) {
+    this.updateOptions({ gap });
+  }
+
+  public setTrackHeight(trackHeight: number | string) {
+    this.updateOptions({ trackHeight });
+  }
+
+  public setInterval(interval: number) {
+    this.updateOptions({ interval });
+  }
+
+  public setDurationRange(durationRange: [number, number]) {
+    this.updateOptions({ durationRange });
+  }
+
+  public setRate(rate: number) {
+    if (rate !== this.options.rate) {
+      this.updateOptions({ rate });
     }
-    this.pluginSystem.useRefine(plugin);
-    return plugin as ManagerPlugin<T> & { name: string };
   }
 }
