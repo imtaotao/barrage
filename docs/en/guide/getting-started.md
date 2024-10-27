@@ -5,6 +5,9 @@
 
 `danmu` is a **highly extensible** and **feature-rich** danmaku library that provides developers with easy integration and the ability to write custom plugins. It meets complex requirements while also allowing for extreme customization. We have set up a demo site where you can see some examples in action.
 
+> [!NOTE] Tip
+> You can open the console in the demo site and use `window.manager` to obtain the manager instance for real-time debugging and effect verification.
+
 https://imtaotao.github.io/danmu
 
 ## 🎯 Why Choose `danmu` ?
