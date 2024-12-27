@@ -16,7 +16,7 @@ const formatOptions = <T>(options?: CreateOption<T>) => {
     },
     options,
   );
-  assert(newOptions.gap >= 0, 'The "gap" must be >= 0');
+  assert(newOptions.gap >= 0, 'Gap must be greater than or equal to 0');
   if (typeof newOptions.limits.stash !== 'number') {
     newOptions.limits.stash = Infinity;
   }

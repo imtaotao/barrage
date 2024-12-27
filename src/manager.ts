@@ -55,7 +55,7 @@ export class Manager<
     }
     if (!('duration' in options)) {
       const duration = random(...this.options.durationRange);
-      assert(duration > 0, `Invalid move time "${duration}"`);
+      assert(duration > 0, `Invalid duration "${duration}"`);
       options.duration = duration;
     }
     return options as Required<U>;
@@ -144,8 +144,12 @@ export class Manager<
   public unfreeze({ preventEvents = [] }: FreezeOptions = {}) {
     let startFlag: Symbol | undefined;
     let resumeFlag: Symbol | undefined;
-    if (preventEvents.includes('start')) startFlag = INTERNAL_FLAG;
-    if (preventEvents.includes('resume')) resumeFlag = INTERNAL_FLAG;
+    if (preventEvents.includes('start')) {
+      startFlag = INTERNAL_FLAG;
+    }
+    if (preventEvents.includes('resume')) {
+      resumeFlag = INTERNAL_FLAG;
+    }
     this.each((dm) => dm.resume(resumeFlag));
     this.startPlaying(startFlag);
     this._internalStatuses.freeze = false;
@@ -164,7 +168,7 @@ export class Manager<
     if (parentNode) {
       if (typeof parentNode === 'string') {
         const res = document.querySelector(parentNode);
-        assert(res, `Invalid "${parentNode}"`);
+        assert(res, `Invalid selector "${parentNode}"`);
         parentNode = res as HTMLElement;
       }
       if (this.isPlaying()) {
@@ -284,7 +288,7 @@ export class Manager<
       !hook.isEmpty()
         ? hook.emit('flexible', view || 0)
         : console.warn(
-            `The number of views danmaku exceeds the limit (${view})`,
+            `The number of danmu in view exceeds the limit (${view})`,
           );
       return false;
     }
@@ -316,7 +320,7 @@ export class Manager<
     if (el) {
       if (typeof el === 'string') {
         const res = document.querySelector(el);
-        assert(res, `Invalid "${el}"`);
+        assert(res, `Invalid selector "${el}"`);
         el = res as HTMLElement;
       }
       set = (key: string, val: string) =>
@@ -326,7 +330,7 @@ export class Manager<
         this.container.setStyle(key as 'maskImage', val);
     }
     if (url) {
-      assert(typeof url === 'string', 'The url must be a string');
+      assert(typeof url === 'string', `Invalid url "${url}"`);
       set('maskImage', `url("${url}")`);
       set('webkitMaskImage', `url("${url}")`);
       set('maskSize', 'cover');

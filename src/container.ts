@@ -86,7 +86,7 @@ export class Container {
   public _toNumber(p: 'height' | 'width', val: number | string) {
     let n = typeof val === 'number' ? val : toNumber(val, this[p]);
     if (n > this[p]) n = this[p];
-    assert(!Number.isNaN(n), `Invalid "${val}", result is NaN`);
+    assert(!Number.isNaN(n), `${val} is not a number`);
     return n;
   }
 

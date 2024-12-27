@@ -368,7 +368,7 @@ export class Engine<T> {
         }
         const { mode, durationRange } = this._options;
         if (mode !== 'none' && cur.type === 'facile') {
-          assert(cur.track, 'Danmaku missing "track"');
+          assert(cur.track, 'Track not found');
           const prev = cur.track._last(1);
           if (prev && cur.loops === 0) {
             const fixTime = this._collisionPrediction(
