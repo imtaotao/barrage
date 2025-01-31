@@ -9,7 +9,7 @@ This section will teach you how to implement the anti-occlusion feature. Since t
 > 1. Poll to get the `svg` image that needs to prevent occlusion, usually generated through **AI**, but it also depends on business requirements.
 > 2. Call the danmu library's [**`manager.updateOccludedUrl`**](../reference/manager-api/#manager-updateoccludedurl) to set the `CSS` property.
 
-## 示例
+## Example
 
 ```ts {7,10}
 (async function update() {
