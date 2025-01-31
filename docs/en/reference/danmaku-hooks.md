@@ -100,7 +100,7 @@ manager.use({
 
 ## `hooks.beforeDestroy`
 
-**类型：`AsyncHook<[Danmaku<T>, unknown]>`**
+**Type: `AsyncHook<[Danmaku<T>, unknown]>`**
 
 The `beforeDestroy` hook is triggered before the danmaku is destroyed. This hook allows returning a `promise`. If you need to manually call the [**`danmaku.destroy`**](../reference/danmaku-api/#danmaku-destroy) method, you can try passing a `mark`.
 

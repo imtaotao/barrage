@@ -48,7 +48,7 @@ The current number of tracks inside the container. When the container size chang
 
 ## `manager.container`
 
-**类型：`Container`**
+**Type: `Container`**
 
 See the [**`Container API`**](./container-api) section.
 
