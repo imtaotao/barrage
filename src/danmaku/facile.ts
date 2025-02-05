@@ -1,4 +1,4 @@
-import { now, remove } from 'aidly';
+import { now } from 'aidly';
 import type { Track } from '../track';
 import type { Container } from '../container';
 import { createDanmakuLifeCycle } from '../lifeCycle';

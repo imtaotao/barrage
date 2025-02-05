@@ -133,8 +133,12 @@ export class Manager<
   public freeze({ preventEvents = [] }: FreezeOptions = {}) {
     let stopFlag: Symbol | undefined;
     let pauseFlag: Symbol | undefined;
-    if (preventEvents.includes('stop')) stopFlag = INTERNAL_FLAG;
-    if (preventEvents.includes('pause')) pauseFlag = INTERNAL_FLAG;
+    if (preventEvents.includes('stop')) {
+      stopFlag = INTERNAL_FLAG;
+    }
+    if (preventEvents.includes('pause')) {
+      pauseFlag = INTERNAL_FLAG;
+    }
     this.stopPlaying(stopFlag);
     this.each((dm) => dm.pause(pauseFlag));
     this._internalStatuses.freeze = true;
