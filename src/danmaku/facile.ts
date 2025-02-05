@@ -120,7 +120,7 @@ export class FacileDanmaku<T> {
     this.node = document.createElement('div');
     this._setStartStatus();
     (this.node as any).__danmaku__ = this;
-    this.pluginSystem.lifecycle.createNode.emit(this);
+    this.pluginSystem.lifecycle.createNode.emit(this, this.node);
   }
 
   /**
@@ -129,7 +129,7 @@ export class FacileDanmaku<T> {
   public _appendNode(container: HTMLElement) {
     if (!this.node || this.node.parentNode === container) return;
     container.appendChild(this.node);
-    this.pluginSystem.lifecycle.appendNode.emit(this);
+    this.pluginSystem.lifecycle.appendNode.emit(this, this.node);
   }
 
   /**
@@ -141,7 +141,7 @@ export class FacileDanmaku<T> {
     if (!parentNode) return;
     parentNode.removeChild(this.node);
     if (_flag !== INTERNAL_FLAG) {
-      this.pluginSystem.lifecycle.removeNode.emit(this);
+      this.pluginSystem.lifecycle.removeNode.emit(this, this.node);
     }
   }
 
