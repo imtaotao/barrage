@@ -65,19 +65,19 @@ The `moved` hook is triggered when the danmaku finishes moving. Finishing the mo
 
 ## `hooks.appendNode`
 
-**Type: `SyncHook<[Danmaku<T>]>`**
+**Type: `SyncHook<[Danmaku<T>, HTMLElement]>`**
 
 The `appendNode` hook is triggered when the danmaku node is added to the container. It occurs after the `createNode` hook.
 
 ## `hooks.removeNode`
 
-**Type: `SyncHook<[Danmaku<T>]>`**
+**Type: `SyncHook<[Danmaku<T>, HTMLElement]>`**
 
 The `removeNode` hook will be triggered when the danmaku is removed from the container.
 
 ## `hooks.createNode`
 
-**Type: `SyncHook<[Danmaku<T>]>`**
+**Type: `SyncHook<[Danmaku<T>, HTMLElement]>`**
 
 The `createNode` hook will be triggered after the built-in HTML node of the danmaku is created. You can use `danmaku.node` to get this node within this hook and **perform some styling and rendering operations on the node. This is a very important step for the extensibility of this framework **.
 

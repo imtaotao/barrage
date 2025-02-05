@@ -21,9 +21,9 @@ export function createDanmakuLifeCycle<T extends Danmaku<any>>() {
     resume: new SyncHook<[T]>(),
     beforeMove: new SyncHook<[T]>(),
     moved: new SyncHook<[T]>(),
-    createNode: new SyncHook<[T]>(),
-    appendNode: new SyncHook<[T]>(),
-    removeNode: new SyncHook<[T]>(),
+    createNode: new SyncHook<[T, HTMLElement]>(),
+    appendNode: new SyncHook<[T, HTMLElement]>(),
+    removeNode: new SyncHook<[T, HTMLElement]>(),
     beforeDestroy: new AsyncHook<[T, unknown]>(),
     destroyed: new SyncHook<[T, unknown]>(),
   });
